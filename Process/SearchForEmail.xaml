@@ -3,6 +3,7 @@
     <x:Property Name="in_OrderNumber" Type="InArgument(x:String)" />
     <x:Property Name="in_ReceivedAfter" Type="InArgument(x:String)" />
     <x:Property Name="out_MailMessage" Type="OutArgument(x:String)" />
+    <x:Property Name="in_Config" Type="InArgument(scg:Dictionary(x:String, x:Object))" />
   </x:Members>
   <VisualBasic.Settings>
     <x:Null />
@@ -104,18 +105,27 @@
       <AssemblyReference>UiPath.Platform</AssemblyReference>
     </sco:Collection>
   </TextExpression.ReferencesForImplementation>
-  <Sequence DisplayName="SearchForEmail" sap:VirtualizedContainerService.HintSize="987,1073.04" sap2010:WorkflowViewState.IdRef="Sequence_1">
+  <Sequence DisplayName="SearchForEmail" sap:VirtualizedContainerService.HintSize="831,1073.04" sap2010:WorkflowViewState.IdRef="Sequence_1">
     <Sequence.Variables>
       <Variable x:TypeArguments="scg:List(snm:MailMessage)" Name="SearchResults" />
       <Variable x:TypeArguments="x:String" Name="SQLQuery" />
+      <Variable x:TypeArguments="x:String" Name="OutlookFilter" />
     </Sequence.Variables>
     <sap:WorkflowViewStateService.ViewState>
       <scg:Dictionary x:TypeArguments="x:String, x:Object">
         <x:Boolean x:Key="IsExpanded">True</x:Boolean>
       </scg:Dictionary>
     </sap:WorkflowViewStateService.ViewState>
-    <ui:LogMessage DisplayName="Log Message" sap:VirtualizedContainerService.HintSize="434,173" sap2010:WorkflowViewState.IdRef="LogMessage_1" Level="{x:Null}" Message="[&quot;Searching for order email&quot;]" />
-    <ui:GetOutlookMailMessages Account="cxe-automation@uipath.com" DisplayName="Get Outlook Mail Messages" Filter="[&quot;@SQL=urn:schemas:httpmail:fromemail = 'noreply@e.pearson.com' AND urn:schemas:httpmail:subject = 'Voucher Numbers for your Exam' AND urn:schemas:httpmail:datereceived &gt;= '&quot;+ in_ReceivedAfter +&quot;'&quot;]" FilterByMessageIds="{x:Null}" GetAttachements="False" sap:VirtualizedContainerService.HintSize="434,57" sap2010:WorkflowViewState.IdRef="GetOutlookMailMessages_1" MailFolder="Inbox\UiPath Marketplace" MarkAsRead="False" Messages="[SearchResults]" OnlyUnreadMessages="False" OrderByDate="NewestFirst" TimeoutMS="{x:Null}" Top="30" UseISConnection="True">
+    <ui:LogMessage DisplayName="Log Message" sap:VirtualizedContainerService.HintSize="434,173" sap2010:WorkflowViewState.IdRef="LogMessage_1" Message="[&quot;Searching for order email&quot;]" />
+    <Assign DisplayName="Create Filter" sap:VirtualizedContainerService.HintSize="434,114" sap2010:WorkflowViewState.IdRef="Assign_3">
+      <Assign.To>
+        <OutArgument x:TypeArguments="x:String">[OutlookFilter]</OutArgument>
+      </Assign.To>
+      <Assign.Value>
+        <InArgument x:TypeArguments="x:String">["@" + in_Config("SQL_Filter").ToString.Replace("&lt;senderEmail&gt;",in_Config("VoucherSender").ToString).Replace("&lt;subject&gt;",in_Config("VoucherSubject").ToString).Replace("&lt;receivedAfter&gt;",in_ReceivedAfter)]</InArgument>
+      </Assign.Value>
+    </Assign>
+    <ui:GetOutlookMailMessages FilterByMessageIds="{x:Null}" TimeoutMS="{x:Null}" Account="cxe-automation@uipath.com" DisplayName="Get Outlook Mail Messages" Filter="[OutlookFilter]" GetAttachements="False" sap:VirtualizedContainerService.HintSize="434,57" sap2010:WorkflowViewState.IdRef="GetOutlookMailMessages_1" MailFolder="Inbox\UiPath Marketplace" MarkAsRead="False" Messages="[SearchResults]" OnlyUnreadMessages="False" OrderByDate="NewestFirst" Top="30" UseISConnection="True">
       <ui:GetOutlookMailMessages.ConnectionDetailsBackupSlot>
         <usau:BackupSlot x:TypeArguments="umae:ConnectionDetails" StoredValue="{x:Null}">
           <usau:BackupSlot.BackupValues>
@@ -124,7 +134,7 @@
         </usau:BackupSlot>
       </ui:GetOutlookMailMessages.ConnectionDetailsBackupSlot>
     </ui:GetOutlookMailMessages>
-    <Assign DisplayName="Get Mail" sap:VirtualizedContainerService.HintSize="434,104" sap2010:WorkflowViewState.IdRef="Assign_2">
+    <Assign DisplayName="Get Mail" sap:VirtualizedContainerService.HintSize="434,105" sap2010:WorkflowViewState.IdRef="Assign_2">
       <Assign.To>
         <OutArgument x:TypeArguments="x:String">[out_MailMessage]</OutArgument>
       </Assign.To>

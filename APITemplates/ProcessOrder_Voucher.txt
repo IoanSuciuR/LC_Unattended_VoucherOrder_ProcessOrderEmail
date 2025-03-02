@@ -1,0 +1,5 @@
+﻿{
+   "productId": "<productId>",
+   "code": "<VoucherId>",
+   "expiryDate": "<VoucherExpiration>T23:59:59:000Z"
+}
