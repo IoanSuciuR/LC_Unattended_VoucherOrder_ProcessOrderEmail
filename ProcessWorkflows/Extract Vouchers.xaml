@@ -97,18 +97,15 @@
       <AssemblyReference>System.Linq.Queryable</AssemblyReference>
     </sco:Collection>
   </TextExpression.ReferencesForImplementation>
-  <Sequence DisplayName="Extract_Vouchers" sap:VirtualizedContainerService.HintSize="1517,2210" sap2010:WorkflowViewState.IdRef="Sequence_1">
+  <Sequence DisplayName="Extract_Vouchers" sap:VirtualizedContainerService.HintSize="1213,2981" sap2010:WorkflowViewState.IdRef="Sequence_1">
     <Sequence.Variables>
-      <Variable x:TypeArguments="x:Int32" Name="index">
-        <sap:WorkflowViewStateService.ViewState>
-          <scg:Dictionary x:TypeArguments="x:String, x:Object">
-            <x:String x:Key="SourceIdRef">InterruptibleDoWhile_1</x:String>
-            <x:String x:Key="SourcePropertyName">CurrentIndex</x:String>
-          </scg:Dictionary>
-        </sap:WorkflowViewStateService.ViewState>
-      </Variable>
       <Variable x:TypeArguments="scg:Dictionary(x:String, x:String)" Name="MatrixDictionary" />
       <Variable x:TypeArguments="x:String" Name="VoucherOrderTemplate" />
+      <Variable x:TypeArguments="scg:List(x:String)" Name="VoucherNameList" />
+      <Variable x:TypeArguments="scg:List(x:String)" Name="DateList" />
+      <Variable x:TypeArguments="scg:List(x:String)" Name="VoucherList" />
+      <Variable x:TypeArguments="scg:List(x:String)" Name="VoucherIDList" />
+      <Variable x:TypeArguments="x:Int32" Name="Counter" />
     </Sequence.Variables>
     <sap:WorkflowViewStateService.ViewState>
       <scg:Dictionary x:TypeArguments="x:String, x:Object">
@@ -124,6 +121,23 @@
         <OutArgument x:TypeArguments="scg:Dictionary(x:String, x:String)" x:Key="out_MatrixDictionary">[MatrixDictionary]</OutArgument>
       </ui:InvokeWorkflowFile.Arguments>
     </ui:InvokeWorkflowFile>
+    <ui:InvokeWorkflowFile ArgumentsVariable="{x:Null}" ContinueOnError="{x:Null}" DisplayName="Get Voucher Name List" sap:VirtualizedContainerService.HintSize="506,177" sap2010:WorkflowViewState.IdRef="InvokeWorkflowFile_2" UnSafe="False" WorkflowFileName="Utilities\GetListFromMatrix.xaml">
+      <ui:InvokeWorkflowFile.Arguments>
+        <InArgument x:TypeArguments="x:String" x:Key="in_MatrixFile">[in_Config("CertificationMatrix").ToString]</InArgument>
+        <OutArgument x:TypeArguments="scg:List(x:String)" x:Key="out_MatrixList">[VoucherNameList]</OutArgument>
+        <InArgument x:TypeArguments="x:String" x:Key="in_Column">
+          <Literal x:TypeArguments="x:String" sap2010:WorkflowViewState.IdRef="Literal`1_1">Internal_Store_Match</Literal>
+        </InArgument>
+      </ui:InvokeWorkflowFile.Arguments>
+    </ui:InvokeWorkflowFile>
+    <Assign DisplayName="Extract voucher part" sap:VirtualizedContainerService.HintSize="506,114" sap2010:WorkflowViewState.IdRef="Assign_23">
+      <Assign.To>
+        <OutArgument x:TypeArguments="x:String">[in_EmailBody]</OutArgument>
+      </Assign.To>
+      <Assign.Value>
+        <InArgument x:TypeArguments="x:String">[in_EmailBody.Substring(in_EmailBody.IndexOf("(mm/dd/yyyy)"),in_EmailBody.IndexOf("You may only redeem the voucher for the exam you purchased")- in_EmailBody.IndexOf("(mm/dd/yyyy)")).Replace("(mm/dd/yyyy)",string.Empty).Trim.Replace(Environment.NewLine," ").Replace(vbTab," ")]</InArgument>
+      </Assign.Value>
+    </Assign>
     <Assign DisplayName="Init voucher Dictionary" sap:VirtualizedContainerService.HintSize="506,114" sap2010:WorkflowViewState.IdRef="Assign_9">
       <Assign.To>
         <OutArgument x:TypeArguments="scg:Dictionary(x:String, x:String)">[out_VouchersDictionary]</OutArgument>
@@ -132,21 +146,125 @@
         <InArgument x:TypeArguments="scg:Dictionary(x:String, x:String)">[new Dictionary(Of String,String)]</InArgument>
       </Assign.Value>
     </Assign>
-    <ui:ReadTextFile File="{x:Null}" Content="[VoucherOrderTemplate]" DisplayName="Read Order Template" FileName="APITemplates\ProcessOrder_Voucher.txt" sap:VirtualizedContainerService.HintSize="506,112" sap2010:WorkflowViewState.IdRef="ReadTextFile_2" />
-    <Assign DisplayName="Extract voucher part" sap:VirtualizedContainerService.HintSize="506,114" sap2010:WorkflowViewState.IdRef="Assign_1">
+    <Assign DisplayName="Extract Dates" sap:VirtualizedContainerService.HintSize="506,114" sap2010:WorkflowViewState.IdRef="Assign_11">
       <Assign.To>
-        <OutArgument x:TypeArguments="x:String">[in_EmailBody]</OutArgument>
+        <OutArgument x:TypeArguments="scg:List(x:String)">[DateList]</OutArgument>
       </Assign.To>
       <Assign.Value>
-        <InArgument x:TypeArguments="x:String">[in_EmailBody.Substring(in_EmailBody.IndexOf("(mm/dd/yyyy)"),in_EmailBody.IndexOf("You may only redeem the voucher for the exam you purchased")- in_EmailBody.IndexOf("(mm/dd/yyyy)")).Replace("(mm/dd/yyyy)",string.Empty).Trim.Replace(Environment.NewLine," ").Replace(vbTab," ")]</InArgument>
+        <InArgument x:TypeArguments="scg:List(x:String)">[System.Text.RegularExpressions.Regex.Matches(in_EmailBody,"\d{2}\/\d{2}\/\d{4}").Cast(Of System.Text.RegularExpressions.Match)().Select(Function(m) m.value).ToList]</InArgument>
       </Assign.Value>
     </Assign>
-    <ui:InterruptibleDoWhile Condition="[in_EmailBody.Length &gt; 0]" CurrentIndex="[index]" DisplayName="Do While" sap:VirtualizedContainerService.HintSize="506,1497" sap2010:WorkflowViewState.IdRef="InterruptibleDoWhile_1">
-      <ui:InterruptibleDoWhile.Body>
-        <Sequence DisplayName="Body" sap:VirtualizedContainerService.HintSize="504,1376" sap2010:WorkflowViewState.IdRef="Sequence_2">
+    <ui:ForEach x:TypeArguments="x:String" CurrentIndex="{x:Null}" DisplayName="For Each currentDate" sap:VirtualizedContainerService.HintSize="506,57" sap2010:WorkflowViewState.IdRef="ForEach`1_1" Values="[DateList]">
+      <ui:ForEach.Body>
+        <ActivityAction x:TypeArguments="x:String">
+          <ActivityAction.Argument>
+            <DelegateInArgument x:TypeArguments="x:String" Name="currentDate" />
+          </ActivityAction.Argument>
+          <Sequence DisplayName="Body" sap:VirtualizedContainerService.HintSize="468,165" sap2010:WorkflowViewState.IdRef="Sequence_6">
+            <sap:WorkflowViewStateService.ViewState>
+              <scg:Dictionary x:TypeArguments="x:String, x:Object">
+                <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+              </scg:Dictionary>
+            </sap:WorkflowViewStateService.ViewState>
+            <Assign DisplayName="Remove date" sap:VirtualizedContainerService.HintSize="434,105" sap2010:WorkflowViewState.IdRef="Assign_13">
+              <Assign.To>
+                <OutArgument x:TypeArguments="x:String">[in_EmailBody]</OutArgument>
+              </Assign.To>
+              <Assign.Value>
+                <InArgument x:TypeArguments="x:String">[in_EmailBody.Replace(currentDate,string.Empty)]</InArgument>
+              </Assign.Value>
+            </Assign>
+          </Sequence>
+        </ActivityAction>
+      </ui:ForEach.Body>
+      <sap:WorkflowViewStateService.ViewState>
+        <scg:Dictionary x:TypeArguments="x:String, x:Object">
+          <x:Boolean x:Key="IsExpanded">False</x:Boolean>
+          <x:Boolean x:Key="IsPinned">False</x:Boolean>
+        </scg:Dictionary>
+      </sap:WorkflowViewStateService.ViewState>
+    </ui:ForEach>
+    <Assign DisplayName="Extract Vouchers" sap:VirtualizedContainerService.HintSize="506,114" sap2010:WorkflowViewState.IdRef="Assign_12">
+      <Assign.To>
+        <OutArgument x:TypeArguments="scg:List(x:String)">[VoucherList]</OutArgument>
+      </Assign.To>
+      <Assign.Value>
+        <InArgument x:TypeArguments="scg:List(x:String)">[Regex.Matches(in_EmailBody, String.Join("|", VoucherNameList.Select(Function(v) Regex.Escape(v)))).Cast(Of Match)().Select(Function(m) m.Value).ToList()]</InArgument>
+      </Assign.Value>
+    </Assign>
+    <ui:ForEach x:TypeArguments="x:String" CurrentIndex="{x:Null}" DisplayName="For Each Voucher Name" sap:VirtualizedContainerService.HintSize="506,57" sap2010:WorkflowViewState.IdRef="ForEach`1_2" Values="[VoucherList]">
+      <ui:ForEach.Body>
+        <ActivityAction x:TypeArguments="x:String">
+          <ActivityAction.Argument>
+            <DelegateInArgument x:TypeArguments="x:String" Name="currentVoucher" />
+          </ActivityAction.Argument>
+          <Sequence DisplayName="Body" sap:VirtualizedContainerService.HintSize="468,165" sap2010:WorkflowViewState.IdRef="Sequence_7">
+            <sap:WorkflowViewStateService.ViewState>
+              <scg:Dictionary x:TypeArguments="x:String, x:Object">
+                <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+              </scg:Dictionary>
+            </sap:WorkflowViewStateService.ViewState>
+            <Assign DisplayName="Remove date" sap:VirtualizedContainerService.HintSize="434,105" sap2010:WorkflowViewState.IdRef="Assign_14">
+              <Assign.To>
+                <OutArgument x:TypeArguments="x:String">[in_EmailBody]</OutArgument>
+              </Assign.To>
+              <Assign.Value>
+                <InArgument x:TypeArguments="x:String">[in_EmailBody.Replace(currentVoucher,string.Empty)]</InArgument>
+              </Assign.Value>
+            </Assign>
+          </Sequence>
+        </ActivityAction>
+      </ui:ForEach.Body>
+      <sap:WorkflowViewStateService.ViewState>
+        <scg:Dictionary x:TypeArguments="x:String, x:Object">
+          <x:Boolean x:Key="IsExpanded">False</x:Boolean>
+          <x:Boolean x:Key="IsPinned">False</x:Boolean>
+        </scg:Dictionary>
+      </sap:WorkflowViewStateService.ViewState>
+    </ui:ForEach>
+    <Assign DisplayName="Extract Voucher ID" sap:VirtualizedContainerService.HintSize="506,114" sap2010:WorkflowViewState.IdRef="Assign_15">
+      <Assign.To>
+        <OutArgument x:TypeArguments="scg:List(x:String)">[VoucherIDList]</OutArgument>
+      </Assign.To>
+      <Assign.Value>
+        <InArgument x:TypeArguments="scg:List(x:String)">[in_EmailBody.Split({" "},StringSplitOptions.RemoveEmptyEntries).ToList]</InArgument>
+      </Assign.Value>
+    </Assign>
+    <If Condition="[VoucherIDList.Count &lt;&gt; VoucherList.Count OrElse VoucherIDList.Count &lt;&gt; DateList.Count]" DisplayName="If Extraction doesn't match" sap:VirtualizedContainerService.HintSize="506,252" sap2010:WorkflowViewState.IdRef="If_2">
+      <If.Then>
+        <Sequence DisplayName="Then" sap:VirtualizedContainerService.HintSize="416,25" sap2010:WorkflowViewState.IdRef="Sequence_8">
+          <sap:WorkflowViewStateService.ViewState>
+            <scg:Dictionary x:TypeArguments="x:String, x:Object">
+              <x:Boolean x:Key="IsExpanded">False</x:Boolean>
+              <x:Boolean x:Key="IsPinned">False</x:Boolean>
+            </scg:Dictionary>
+          </sap:WorkflowViewStateService.ViewState>
+          <Throw DisplayName="Throw System Exception" Exception="[new System.Exception(&quot;Failed extraction - numbers don't match&quot;)]" sap:VirtualizedContainerService.HintSize="382,113" sap2010:WorkflowViewState.IdRef="Throw_1" />
+        </Sequence>
+      </If.Then>
+      <If.Else>
+        <Sequence DisplayName="Else" sap:VirtualizedContainerService.HintSize="416,89" sap2010:WorkflowViewState.IdRef="Sequence_9">
+          <sap:WorkflowViewStateService.ViewState>
+            <scg:Dictionary x:TypeArguments="x:String, x:Object">
+              <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+            </scg:Dictionary>
+          </sap:WorkflowViewStateService.ViewState>
+        </Sequence>
+      </If.Else>
+    </If>
+    <ui:ReadTextFile File="{x:Null}" Content="[VoucherOrderTemplate]" DisplayName="Read Order Template" FileName="APITemplates\ProcessOrder_Voucher.txt" sap:VirtualizedContainerService.HintSize="506,112" sap2010:WorkflowViewState.IdRef="ReadTextFile_2" />
+    <Assign DisplayName="Init counter" sap:VirtualizedContainerService.HintSize="506,114" sap2010:WorkflowViewState.IdRef="Assign_16">
+      <Assign.To>
+        <OutArgument x:TypeArguments="x:Int32">[Counter]</OutArgument>
+      </Assign.To>
+      <Assign.Value>
+        <InArgument x:TypeArguments="x:Int32">0</InArgument>
+      </Assign.Value>
+    </Assign>
+    <ui:InterruptibleWhile CurrentIndex="{x:Null}" Condition="[Counter &lt; VoucherIDList.Count]" DisplayName="While Vouchers left" sap:VirtualizedContainerService.HintSize="506,1269" sap2010:WorkflowViewState.IdRef="InterruptibleWhile_1">
+      <ui:InterruptibleWhile.Body>
+        <Sequence DisplayName="Body" sap:VirtualizedContainerService.HintSize="504,1148" sap2010:WorkflowViewState.IdRef="Sequence_10">
           <Sequence.Variables>
-            <Variable x:TypeArguments="x:Int32" Name="VoucherEnd" />
-            <Variable x:TypeArguments="x:String" Name="VoucherRow" />
             <Variable x:TypeArguments="x:String" Name="VoucherNumber" />
             <Variable x:TypeArguments="x:String" Name="VoucherDate" />
             <Variable x:TypeArguments="x:String" Name="VoucherName" />
@@ -154,58 +272,34 @@
           <sap:WorkflowViewStateService.ViewState>
             <scg:Dictionary x:TypeArguments="x:String, x:Object">
               <x:Boolean x:Key="IsExpanded">True</x:Boolean>
-              <x:Boolean x:Key="IsPinned">False</x:Boolean>
             </scg:Dictionary>
           </sap:WorkflowViewStateService.ViewState>
-          <Assign DisplayName="Get End of voucher row" sap:VirtualizedContainerService.HintSize="470,114" sap2010:WorkflowViewState.IdRef="Assign_2">
-            <Assign.To>
-              <OutArgument x:TypeArguments="x:Int32">[VoucherEnd]</OutArgument>
-            </Assign.To>
-            <Assign.Value>
-              <InArgument x:TypeArguments="x:Int32">[System.Text.RegularExpressions.Regex.Matches(in_EmailBody,"\d\d\/\d\d\/\d\d\d\d")(0).Index + 10]</InArgument>
-            </Assign.Value>
-          </Assign>
-          <Assign sap:VirtualizedContainerService.HintSize="470,114" sap2010:WorkflowViewState.IdRef="Assign_3">
-            <Assign.To>
-              <OutArgument x:TypeArguments="x:String">[VoucherRow]</OutArgument>
-            </Assign.To>
-            <Assign.Value>
-              <InArgument x:TypeArguments="x:String">[in_EmailBody.Substring(0,VoucherEnd).Trim]</InArgument>
-            </Assign.Value>
-          </Assign>
-          <Assign DisplayName="Remove voucher" sap:VirtualizedContainerService.HintSize="470,114" sap2010:WorkflowViewState.IdRef="Assign_4">
-            <Assign.To>
-              <OutArgument x:TypeArguments="x:String">[in_EmailBody]</OutArgument>
-            </Assign.To>
-            <Assign.Value>
-              <InArgument x:TypeArguments="x:String">[in_EmailBody.Substring(VoucherEnd).Trim]</InArgument>
-            </Assign.Value>
-          </Assign>
-          <Assign DisplayName="Get voucher Number" sap:VirtualizedContainerService.HintSize="470,114" sap2010:WorkflowViewState.IdRef="Assign_5">
+          <Assign DisplayName="Get voucher Number" sap:VirtualizedContainerService.HintSize="470,114" sap2010:WorkflowViewState.IdRef="Assign_17">
             <Assign.To>
               <OutArgument x:TypeArguments="x:String">[VoucherNumber]</OutArgument>
             </Assign.To>
             <Assign.Value>
-              <InArgument x:TypeArguments="x:String">[VoucherRow.Split(" "c).First.trim]</InArgument>
+              <InArgument x:TypeArguments="x:String">[VoucherIDList(Counter)]</InArgument>
             </Assign.Value>
           </Assign>
-          <Assign DisplayName="Get Voucher Date" sap:VirtualizedContainerService.HintSize="470,114" sap2010:WorkflowViewState.IdRef="Assign_6">
+          <Assign DisplayName="Get Voucher Date" sap:VirtualizedContainerService.HintSize="470,114" sap2010:WorkflowViewState.IdRef="Assign_18">
             <Assign.To>
               <OutArgument x:TypeArguments="x:String">[VoucherDate]</OutArgument>
             </Assign.To>
             <Assign.Value>
-              <InArgument x:TypeArguments="x:String">[System.Text.RegularExpressions.Regex.Matches(VoucherRow,"\d\d\/\d\d\/\d\d\d\d")(0).Value]</InArgument>
+              <InArgument x:TypeArguments="x:String">[DateList(Counter)]</InArgument>
             </Assign.Value>
           </Assign>
-          <Assign DisplayName="Get Voucher Name" sap:VirtualizedContainerService.HintSize="470,114" sap2010:WorkflowViewState.IdRef="Assign_7">
+          <Assign DisplayName="Get Voucher Name" sap:VirtualizedContainerService.HintSize="470,114" sap2010:WorkflowViewState.IdRef="Assign_19">
             <Assign.To>
               <OutArgument x:TypeArguments="x:String">[VoucherName]</OutArgument>
             </Assign.To>
             <Assign.Value>
-              <InArgument x:TypeArguments="x:String">[VoucherRow.Replace(VoucherDate,"").Replace(VoucherNumber,"").Trim]</InArgument>
+              <InArgument x:TypeArguments="x:String">[VoucherList(Counter)]</InArgument>
             </Assign.Value>
           </Assign>
-          <If Condition="[out_VouchersDictionary.ContainsKey(MatrixDictionary(VoucherName))]" DisplayName="If Key added" sap:VirtualizedContainerService.HintSize="470,468" sap2010:WorkflowViewState.IdRef="If_1">
+          <ui:LogMessage DisplayName="Log Message" sap:VirtualizedContainerService.HintSize="470,173" sap2010:WorkflowViewState.IdRef="LogMessage_7" Message="[String.Format(&quot;Voucher found: {0}, expiration: {1}, name: {2}&quot;,VoucherNumber,VoucherDate,VoucherName)]" />
+          <If Condition="[out_VouchersDictionary.ContainsKey(MatrixDictionary(VoucherName))]" DisplayName="If Key added" sap:VirtualizedContainerService.HintSize="470,468" sap2010:WorkflowViewState.IdRef="If_3">
             <sap:WorkflowViewStateService.ViewState>
               <scg:Dictionary x:TypeArguments="x:String, x:Object">
                 <x:Boolean x:Key="IsExpanded">True</x:Boolean>
@@ -213,13 +307,13 @@
               </scg:Dictionary>
             </sap:WorkflowViewStateService.ViewState>
             <If.Then>
-              <Sequence DisplayName="Then" sap:VirtualizedContainerService.HintSize="468,165" sap2010:WorkflowViewState.IdRef="Sequence_3">
+              <Sequence DisplayName="Then" sap:VirtualizedContainerService.HintSize="468,165" sap2010:WorkflowViewState.IdRef="Sequence_11">
                 <sap:WorkflowViewStateService.ViewState>
                   <scg:Dictionary x:TypeArguments="x:String, x:Object">
                     <x:Boolean x:Key="IsExpanded">True</x:Boolean>
                   </scg:Dictionary>
                 </sap:WorkflowViewStateService.ViewState>
-                <Assign DisplayName="Add new voucher to voucher type" sap:VirtualizedContainerService.HintSize="434,105" sap2010:WorkflowViewState.IdRef="Assign_10">
+                <Assign DisplayName="Add new voucher to voucher type" sap:VirtualizedContainerService.HintSize="434,105" sap2010:WorkflowViewState.IdRef="Assign_20">
                   <Assign.To>
                     <OutArgument x:TypeArguments="x:String">[out_VouchersDictionary(MatrixDictionary(VoucherName))]</OutArgument>
                   </Assign.To>
@@ -230,13 +324,13 @@
               </Sequence>
             </If.Then>
             <If.Else>
-              <Sequence DisplayName="Else" sap:VirtualizedContainerService.HintSize="468,165" sap2010:WorkflowViewState.IdRef="Sequence_4">
+              <Sequence DisplayName="Else" sap:VirtualizedContainerService.HintSize="468,165" sap2010:WorkflowViewState.IdRef="Sequence_12">
                 <sap:WorkflowViewStateService.ViewState>
                   <scg:Dictionary x:TypeArguments="x:String, x:Object">
                     <x:Boolean x:Key="IsExpanded">True</x:Boolean>
                   </scg:Dictionary>
                 </sap:WorkflowViewStateService.ViewState>
-                <Assign DisplayName="Add new Voucher type" sap:VirtualizedContainerService.HintSize="434,105" sap2010:WorkflowViewState.IdRef="Assign_8">
+                <Assign DisplayName="Add new Voucher type" sap:VirtualizedContainerService.HintSize="434,105" sap2010:WorkflowViewState.IdRef="Assign_21">
                   <Assign.To>
                     <OutArgument x:TypeArguments="x:String">[out_VouchersDictionary(MatrixDictionary(VoucherName))]</OutArgument>
                   </Assign.To>
@@ -247,9 +341,16 @@
               </Sequence>
             </If.Else>
           </If>
-          <ui:LogMessage DisplayName="Log Message" sap:VirtualizedContainerService.HintSize="470,164" sap2010:WorkflowViewState.IdRef="LogMessage_3" Message="[String.Format(&quot;Voucher found: {0}, expiration: {1}, name: {2}&quot;,VoucherNumber,VoucherDate,VoucherName)]" />
+          <Assign DisplayName="Increase Counter" sap:VirtualizedContainerService.HintSize="470,105" sap2010:WorkflowViewState.IdRef="Assign_22">
+            <Assign.To>
+              <OutArgument x:TypeArguments="x:Int32">[Counter]</OutArgument>
+            </Assign.To>
+            <Assign.Value>
+              <InArgument x:TypeArguments="x:Int32">[Counter + 1]</InArgument>
+            </Assign.Value>
+          </Assign>
         </Sequence>
-      </ui:InterruptibleDoWhile.Body>
-    </ui:InterruptibleDoWhile>
+      </ui:InterruptibleWhile.Body>
+    </ui:InterruptibleWhile>
   </Sequence>
 </Activity>
