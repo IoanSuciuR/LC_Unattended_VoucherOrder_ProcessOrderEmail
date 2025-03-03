@@ -88,7 +88,7 @@
       <AssemblyReference>System.Runtime.Numerics</AssemblyReference>
     </sco:Collection>
   </TextExpression.ReferencesForImplementation>
-  <Sequence DisplayName="WriteErrorLog" sap:VirtualizedContainerService.HintSize="1312,1073.04" sap2010:WorkflowViewState.IdRef="Sequence_1">
+  <Sequence DisplayName="WriteErrorLog" sap:VirtualizedContainerService.HintSize="1146,1098.04" sap2010:WorkflowViewState.IdRef="Sequence_1">
     <Sequence.Variables>
       <Variable x:TypeArguments="x:String" Name="ErrorLogFileName" />
     </Sequence.Variables>
