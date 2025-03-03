@@ -1,0 +1,10 @@
+{
+  "orders": [
+    {
+      "orderId": "<orderId>",
+      "vouchers": [
+        <vouchers>
+      ]
+    }
+  ]
+}

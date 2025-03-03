@@ -40,6 +40,7 @@
       <x:String>System.Linq.Expressions</x:String>
       <x:String>System.Text.RegularExpressions</x:String>
       <x:String>System.Numerics</x:String>
+      <x:String>UiPath.Platform.ResourceHandling</x:String>
     </sco:Collection>
   </TextExpression.NamespacesForImplementation>
   <TextExpression.ReferencesForImplementation>
@@ -87,6 +88,7 @@
       <AssemblyReference>System.Collections.NonGeneric</AssemblyReference>
       <AssemblyReference>System.Text.RegularExpressions</AssemblyReference>
       <AssemblyReference>System.Runtime.Numerics</AssemblyReference>
+      <AssemblyReference>UiPath.Platform</AssemblyReference>
     </sco:Collection>
   </TextExpression.ReferencesForImplementation>
   <Sequence DisplayName="CreateProcessOrderJson" sap:VirtualizedContainerService.HintSize="1084,1073.04" sap2010:WorkflowViewState.IdRef="Sequence_1">
@@ -95,14 +97,14 @@
         <x:Boolean x:Key="IsExpanded">True</x:Boolean>
       </scg:Dictionary>
     </sap:WorkflowViewStateService.ViewState>
-    <ui:LogMessage DisplayName="Log Message" sap:VirtualizedContainerService.HintSize="506,173" sap2010:WorkflowViewState.IdRef="LogMessage_1" Message="[&quot;Checking content and creating API Body&quot;]" />
-    <ui:ForEach x:TypeArguments="x:String" CurrentIndex="{x:Null}" DisplayName="For Each order item" sap:VirtualizedContainerService.HintSize="506,876" sap2010:WorkflowViewState.IdRef="ForEach`1_1" Values="[in_VouchersDictionary.Keys]">
+    <ui:LogMessage DisplayName="Log Message" sap:VirtualizedContainerService.HintSize="470,173" sap2010:WorkflowViewState.IdRef="LogMessage_1" Message="[&quot;Checking content and creating API Body&quot;]" />
+    <ui:ForEach x:TypeArguments="x:String" CurrentIndex="{x:Null}" DisplayName="For Each order item" sap:VirtualizedContainerService.HintSize="470,466" sap2010:WorkflowViewState.IdRef="ForEach`1_1" Values="[in_VouchersDictionary.Keys]">
       <ui:ForEach.Body>
         <ActivityAction x:TypeArguments="x:String">
           <ActivityAction.Argument>
             <DelegateInArgument x:TypeArguments="x:String" Name="orderItem" />
           </ActivityAction.Argument>
-          <Sequence DisplayName="Body" sap:VirtualizedContainerService.HintSize="504,755" sap2010:WorkflowViewState.IdRef="Sequence_2">
+          <Sequence DisplayName="Body" sap:VirtualizedContainerService.HintSize="468,336" sap2010:WorkflowViewState.IdRef="Sequence_2">
             <Sequence.Variables>
               <Variable x:TypeArguments="x:String" Name="ProductId" />
               <Variable x:TypeArguments="x:Int32" Name="ProductQuantity" />
@@ -112,7 +114,7 @@
                 <x:Boolean x:Key="IsExpanded">True</x:Boolean>
               </scg:Dictionary>
             </sap:WorkflowViewStateService.ViewState>
-            <Assign DisplayName="Get Product Quantity" sap:VirtualizedContainerService.HintSize="470,114" sap2010:WorkflowViewState.IdRef="Assign_2">
+            <Assign DisplayName="Get Product Quantity" sap:VirtualizedContainerService.HintSize="434,114" sap2010:WorkflowViewState.IdRef="Assign_2">
               <Assign.To>
                 <OutArgument x:TypeArguments="x:Int32">[ProductQuantity]</OutArgument>
               </Assign.To>
@@ -120,7 +122,7 @@
                 <InArgument x:TypeArguments="x:Int32">[Cint(System.Text.RegularExpressions.Regex.Matches(in_TransactionItem.SpecificContent(orderItem).ToString,"Quantity:(\d+)")(0).Groups(1).Value)]</InArgument>
               </Assign.Value>
             </Assign>
-            <Assign DisplayName="Get Product ID" sap:VirtualizedContainerService.HintSize="470,114" sap2010:WorkflowViewState.IdRef="Assign_1">
+            <Assign DisplayName="Get Product ID" sap:VirtualizedContainerService.HintSize="434,114" sap2010:WorkflowViewState.IdRef="Assign_1">
               <Assign.To>
                 <OutArgument x:TypeArguments="x:String">[ProductId]</OutArgument>
               </Assign.To>
@@ -128,7 +130,13 @@
                 <InArgument x:TypeArguments="x:String">[in_TransactionItem.SpecificContent(orderItem).ToString.Replace("Quantity:" + ProductQuantity.ToString + "|ID:","")]</InArgument>
               </Assign.Value>
             </Assign>
-            <If Condition="[System.Text.RegularExpressions.Regex.Matches(in_VouchersDictionary(orderItem),&quot;&lt;productId&gt;&quot;).Count = ProductQuantity]" DisplayName="If Voucher count matches" sap:VirtualizedContainerService.HintSize="470,467" sap2010:WorkflowViewState.IdRef="If_1">
+            <If Condition="[System.Text.RegularExpressions.Regex.Matches(in_VouchersDictionary(orderItem),&quot;&lt;productId&gt;&quot;).Count = ProductQuantity]" DisplayName="If Voucher count matches" sap:VirtualizedContainerService.HintSize="434,48" sap2010:WorkflowViewState.IdRef="If_1">
+              <sap:WorkflowViewStateService.ViewState>
+                <scg:Dictionary x:TypeArguments="x:String, x:Object">
+                  <x:Boolean x:Key="IsExpanded">False</x:Boolean>
+                  <x:Boolean x:Key="IsPinned">False</x:Boolean>
+                </scg:Dictionary>
+              </sap:WorkflowViewStateService.ViewState>
               <If.Then>
                 <Sequence DisplayName="Then" sap:VirtualizedContainerService.HintSize="468,165" sap2010:WorkflowViewState.IdRef="Sequence_3">
                   <sap:WorkflowViewStateService.ViewState>
@@ -161,5 +169,22 @@
         </ActivityAction>
       </ui:ForEach.Body>
     </ui:ForEach>
+    <ui:ReadTextFile File="{x:Null}" Content="[out_APIBody]" DisplayName="Read API Body" FileName="APITemplates\ProcessVoucher_All.txt" sap:VirtualizedContainerService.HintSize="470,112" sap2010:WorkflowViewState.IdRef="ReadTextFile_1" />
+    <Assign DisplayName="Add Order Id" sap:VirtualizedContainerService.HintSize="470,114" sap2010:WorkflowViewState.IdRef="Assign_4">
+      <Assign.To>
+        <OutArgument x:TypeArguments="x:String">[out_APIBody]</OutArgument>
+      </Assign.To>
+      <Assign.Value>
+        <InArgument x:TypeArguments="x:String">[out_APIBody.Replace("&lt;orderId&gt;",in_TransactionItem.SpecificContent("OrderID").ToString)]</InArgument>
+      </Assign.Value>
+    </Assign>
+    <Assign DisplayName="Add Order vouchers" sap:VirtualizedContainerService.HintSize="470,105" sap2010:WorkflowViewState.IdRef="Assign_5">
+      <Assign.To>
+        <OutArgument x:TypeArguments="x:String">[out_APIBody]</OutArgument>
+      </Assign.To>
+      <Assign.Value>
+        <InArgument x:TypeArguments="x:String">[out_APIBody.Replace("&lt;vouchers&gt;",String.Join(",",in_VouchersDictionary))]</InArgument>
+      </Assign.Value>
+    </Assign>
   </Sequence>
 </Activity>
