@@ -3,7 +3,7 @@
     <x:Property Name="in_TransactionItem" Type="InArgument(ui:QueueItem)" />
     <x:Property Name="in_Config" Type="InArgument(scg:Dictionary(x:String, x:Object))" />
     <x:Property Name="in_VouchersDictionary" Type="InArgument(scg:Dictionary(x:String, x:String))" />
-    <x:Property Name="out_APIBody" Type="InArgument(x:String)" />
+    <x:Property Name="out_APIBody" Type="OutArgument(x:String)" />
   </x:Members>
   <VisualBasic.Settings>
     <x:Null />
@@ -95,7 +95,7 @@
       <AssemblyReference>System.Linq.Queryable</AssemblyReference>
     </sco:Collection>
   </TextExpression.ReferencesForImplementation>
-  <Sequence DisplayName="CreateProcessOrderJson" sap:VirtualizedContainerService.HintSize="1199,1570" sap2010:WorkflowViewState.IdRef="Sequence_1">
+  <Sequence DisplayName="CreateProcessOrderJson" sap:VirtualizedContainerService.HintSize="1070,1570" sap2010:WorkflowViewState.IdRef="Sequence_1">
     <Sequence.Variables>
       <Variable x:TypeArguments="scg:List(x:String)" Name="UniqueIdList" />
     </Sequence.Variables>
@@ -218,7 +218,7 @@
         <OutArgument x:TypeArguments="x:String">[out_APIBody]</OutArgument>
       </Assign.To>
       <Assign.Value>
-        <InArgument x:TypeArguments="x:String">[out_APIBody.Replace("&lt;vouchers&gt;",String.Join(",",in_VouchersDictionary))]</InArgument>
+        <InArgument x:TypeArguments="x:String">[out_APIBody.Replace("&lt;vouchers&gt;",String.Join(",",in_VouchersDictionary.Select(function(kvp) kvp.Value)))]</InArgument>
       </Assign.Value>
     </Assign>
   </Sequence>
