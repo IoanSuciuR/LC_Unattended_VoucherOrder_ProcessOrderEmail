@@ -117,7 +117,7 @@
       <AssemblyReference>System.Text.RegularExpressions</AssemblyReference>
     </sco:Collection>
   </TextExpression.ReferencesForImplementation>
-  <Sequence DisplayName="CheckDuplicate" sap:VirtualizedContainerService.HintSize="1199,1271" sap2010:WorkflowViewState.IdRef="Sequence_1">
+  <Sequence DisplayName="CheckDuplicate" sap:VirtualizedContainerService.HintSize="1517,1271" sap2010:WorkflowViewState.IdRef="Sequence_1">
     <Sequence.Variables>
       <Variable x:TypeArguments="x:String" Name="ConnectionString" />
       <Variable x:TypeArguments="x:String" Name="sql_UserID" />
@@ -130,7 +130,7 @@
         <x:Boolean x:Key="IsExpanded">True</x:Boolean>
       </scg:Dictionary>
     </sap:WorkflowViewStateService.ViewState>
-    <ui:LogMessage DisplayName="Log Message" sap:VirtualizedContainerService.HintSize="434,173" sap2010:WorkflowViewState.IdRef="LogMessage_1" Message="[&quot;Update DB with PV Store number&quot;]" />
+    <ui:LogMessage DisplayName="Log Message" sap:VirtualizedContainerService.HintSize="334,141" sap2010:WorkflowViewState.IdRef="LogMessage_1" Message="[&quot;Update DB with Voucher number&quot;]" />
     <Assign DisplayName="Get Connection String" sap:VirtualizedContainerService.HintSize="434,114" sap2010:WorkflowViewState.IdRef="Assign_1">
       <Assign.To>
         <OutArgument x:TypeArguments="x:String">[ConnectionString]</OutArgument>
@@ -181,7 +181,7 @@
                 <x:Boolean x:Key="IsExpanded">True</x:Boolean>
               </scg:Dictionary>
             </sap:WorkflowViewStateService.ViewState>
-            <ui:ExecuteQuery ContinueOnError="{x:Null}" DataTable="{x:Null}" TimeoutMS="{x:Null}" DisplayName="Update Item with Vouchers" ExistingDbConnection="[DB_Conn]" sap:VirtualizedContainerService.HintSize="382,137" sap2010:WorkflowViewState.IdRef="ExecuteQuery_2" Sql="[in_Config(&quot;DBQ_UpdateItem&quot;).ToString.Replace(&quot;&lt;orderId&gt;&quot;,in_OrderID).Replace(&quot;&lt;itemType&gt;&quot;,MatrixDictionary(currentOrderItem.Key)).Replace(&quot;&lt;voucherId&gt;&quot;, String.Join(&quot;;&quot;, System.Text.RegularExpressions.Regex.Matches(currentOrderItem.Value, &quot;&quot;&quot;code&quot;&quot;:\s*&quot;&quot;(.+?)&quot;&quot;&quot;).&#xD;&#xA;    Cast(Of System.Text.RegularExpressions.Match)().Select(Function(m) m.Groups(1).Value)))]">
+            <ui:ExecuteQuery ContinueOnError="{x:Null}" DataTable="{x:Null}" TimeoutMS="{x:Null}" DisplayName="Update Item with Vouchers" ExistingDbConnection="[DB_Conn]" sap:VirtualizedContainerService.HintSize="382,137" sap2010:WorkflowViewState.IdRef="ExecuteQuery_2" Sql="[in_Config(&quot;DBQ_UpdateItem&quot;).ToString.Replace(&quot;&lt;orderId&gt;&quot;,in_OrderID).Replace(&quot;&lt;itemType&gt;&quot;,MatrixDictionary(currentOrderItem.Key)).Replace(&quot;&lt;voucherId&gt;&quot;, String.Join(&quot;;&quot;, System.Text.RegularExpressions.Regex.Matches(currentOrderItem.Value, &quot;&quot;&quot;code&quot;&quot;:\s*&quot;&quot;(.+?)&quot;&quot;&quot;).&#xA;    Cast(Of System.Text.RegularExpressions.Match)().Select(Function(m) m.Groups(1).Value)))]">
               <ui:ExecuteQuery.Parameters>
                 <scg:Dictionary x:TypeArguments="x:String, Argument" />
               </ui:ExecuteQuery.Parameters>

@@ -97,7 +97,7 @@
       <AssemblyReference>System.Linq.Queryable</AssemblyReference>
     </sco:Collection>
   </TextExpression.ReferencesForImplementation>
-  <Sequence DisplayName="Extract_Vouchers" sap:VirtualizedContainerService.HintSize="1199,2210" sap2010:WorkflowViewState.IdRef="Sequence_1">
+  <Sequence DisplayName="Extract_Vouchers" sap:VirtualizedContainerService.HintSize="1517,2210" sap2010:WorkflowViewState.IdRef="Sequence_1">
     <Sequence.Variables>
       <Variable x:TypeArguments="x:Int32" Name="index">
         <sap:WorkflowViewStateService.ViewState>
@@ -224,7 +224,7 @@
                     <OutArgument x:TypeArguments="x:String">[out_VouchersDictionary(MatrixDictionary(VoucherName))]</OutArgument>
                   </Assign.To>
                   <Assign.Value>
-                    <InArgument x:TypeArguments="x:String">[out_VouchersDictionary(MatrixDictionary(VoucherName)) + "," + VoucherOrderTemplate.Replace("&lt;VoucherId&gt;",VoucherNumber).Replace("&lt;VoucherExpiration&gt;",DateTime.Parse(VoucherDate).ToString("yyyy-MM-dd"))]</InArgument>
+                    <InArgument x:TypeArguments="x:String">[out_VouchersDictionary(MatrixDictionary(VoucherName)) + "," + Environment.NewLine + VoucherOrderTemplate.Replace("&lt;VoucherId&gt;",VoucherNumber).Replace("&lt;VoucherExpiration&gt;",DateTime.Parse(VoucherDate).ToString("yyyy-MM-dd"))]</InArgument>
                   </Assign.Value>
                 </Assign>
               </Sequence>

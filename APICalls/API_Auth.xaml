@@ -114,7 +114,7 @@
       <AssemblyReference>UiPath.Excel.Activities.Design</AssemblyReference>
     </sco:Collection>
   </TextExpression.ReferencesForImplementation>
-  <Sequence DisplayName="API_Auth" sap:VirtualizedContainerService.HintSize="831,1073.04" sap2010:WorkflowViewState.IdRef="Sequence_1">
+  <Sequence DisplayName="API_Auth" sap:VirtualizedContainerService.HintSize="1534,1073.04" sap2010:WorkflowViewState.IdRef="Sequence_1">
     <Sequence.Variables>
       <Variable x:TypeArguments="x:String" Name="APIUsername" />
       <Variable x:TypeArguments="ss:SecureString" Name="APIPassword" />
@@ -129,7 +129,7 @@
       </scg:Dictionary>
     </sap:WorkflowViewStateService.ViewState>
     <ui:LogMessage DisplayName="API Auth" sap:VirtualizedContainerService.HintSize="434,173" sap2010:WorkflowViewState.IdRef="LogMessage_1" Message="[&quot;API Authentication&quot;]" />
-    <ui:GetRobotCredential TimeoutMS="{x:Null}" AssetName="Credentials_UnicornStore_API" CacheStrategy="None" DisplayName="Get API Credentials" FolderPath="UiPath/Certification_Orders" sap:VirtualizedContainerService.HintSize="434,175" sap2010:WorkflowViewState.IdRef="GetRobotCredential_1" Password="[APIPassword]" Username="[APIUsername]" />
+    <ui:GetRobotCredential TimeoutMS="{x:Null}" AssetName="Credentials_UnicornStore_API" CacheStrategy="None" DisplayName="Get API Credentials" sap:VirtualizedContainerService.HintSize="434,175" sap2010:WorkflowViewState.IdRef="GetRobotCredential_1" Password="[APIPassword]" Username="[APIUsername]" />
     <ui:ReadTextFile File="{x:Null}" Content="[APIBody]" DisplayName="Read API Body" FileName="APITemplates\APIAuth.txt" sap:VirtualizedContainerService.HintSize="434,112" sap2010:WorkflowViewState.IdRef="ReadTextFile_1" />
     <ui:MultipleAssign DisplayName="Fill in details" sap:VirtualizedContainerService.HintSize="434,57" sap2010:WorkflowViewState.IdRef="MultipleAssign_1">
       <ui:MultipleAssign.AssignOperations>
