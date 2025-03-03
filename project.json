@@ -8,6 +8,7 @@
     "UiPath.Excel.Activities": "[2.24.4]",
     "UiPath.Mail.Activities": "[1.24.13]",
     "UiPath.System.Activities": "[24.10.7]",
+    "UiPath.UIAutomation.Activities": "[24.10.8]",
     "UiPath.WebAPI.Activities": "[1.21.1]"
   },
   "webServices": [],
