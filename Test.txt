@@ -1,4 +1,4 @@
-If your email application does not support HTML, please contact the mindhub customer service 
+﻿If your email application does not support HTML, please contact the mindhub customer service 
 at uipathstorehelp@pearson.com for further details. 	
  <https://cdn-tp2.mozu.com/16951-45422/resources/images/ui_path_Logo_SMALL_rgb_Orange_digital_147x50.png> 	
 
@@ -20,6 +20,11 @@ UIA58336025B
 	    	 02/07/2026
 	UIA58336025B
 	    	 UiPath Automation Business Analyst Associate Internal Voucher - 100% Off
+	    	 02/07/2026
+			UIA58336025B
+	UiPath Automation Developer Associate Internal Voucher - 100% Off
+	    	 02/07/2026	UIA58336025B
+	UiPath Automation Developer Associate Internal Voucher - 100% Off
 	    	 02/07/2026
 	
 
