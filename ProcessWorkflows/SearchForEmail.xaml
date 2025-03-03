@@ -106,7 +106,7 @@
       <AssemblyReference>UiPath.Platform</AssemblyReference>
     </sco:Collection>
   </TextExpression.ReferencesForImplementation>
-  <Sequence DisplayName="SearchForEmail" sap:VirtualizedContainerService.HintSize="871,1073.04" sap2010:WorkflowViewState.IdRef="Sequence_1">
+  <Sequence DisplayName="SearchForEmail" sap:VirtualizedContainerService.HintSize="1029,1073.04" sap2010:WorkflowViewState.IdRef="Sequence_1">
     <Sequence.Variables>
       <Variable x:TypeArguments="scg:List(snm:MailMessage)" Name="SearchResults" />
       <Variable x:TypeArguments="x:String" Name="SQLQuery" />
@@ -126,7 +126,7 @@
         <InArgument x:TypeArguments="x:String">["@" + in_Config("SQL_Filter").ToString.Replace("&lt;senderEmail&gt;",in_Config("VoucherSender").ToString).Replace("&lt;subject&gt;",in_Config("VoucherSubject").ToString).Replace("&lt;receivedAfter&gt;",in_ReceivedAfter)]</InArgument>
       </Assign.Value>
     </Assign>
-    <ui:GetOutlookMailMessages FilterByMessageIds="{x:Null}" TimeoutMS="{x:Null}" Account="cxe-automation@uipath.com" DisplayName="Get Outlook Mail Messages" Filter="[OutlookFilter]" GetAttachements="False" sap:VirtualizedContainerService.HintSize="436,57" sap2010:WorkflowViewState.IdRef="GetOutlookMailMessages_1" MailFolder="Inbox\UiPath Marketplace" MarkAsRead="False" Messages="[SearchResults]" OnlyUnreadMessages="False" OrderByDate="NewestFirst" Top="30" UseISConnection="True">
+    <ui:GetOutlookMailMessages FilterByMessageIds="{x:Null}" TimeoutMS="{x:Null}" Top="{x:Null}" Account="cxe-automation@uipath.com" DisplayName="Get Outlook Mail Messages" Filter="[OutlookFilter]" GetAttachements="False" sap:VirtualizedContainerService.HintSize="436,57" sap2010:WorkflowViewState.IdRef="GetOutlookMailMessages_1" MailFolder="Inbox\UiPath Marketplace" MarkAsRead="False" Messages="[SearchResults]" OnlyUnreadMessages="False" OrderByDate="NewestFirst" UseISConnection="True">
       <ui:GetOutlookMailMessages.ConnectionDetailsBackupSlot>
         <usau:BackupSlot x:TypeArguments="umae:ConnectionDetails" StoredValue="{x:Null}">
           <usau:BackupSlot.BackupValues>
