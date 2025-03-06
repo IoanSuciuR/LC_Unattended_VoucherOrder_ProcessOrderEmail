@@ -1,7 +1,7 @@
 {
-  "name": "Internal_Unattended_VoucherOrder_ProcessOrderEmail",
+  "name": "LC_Unattended_VoucherOrder_ProcessOrderEmail",
   "projectId": "a6942840-eee2-49d4-afec-863abd7b5344",
-  "description": "Process the voucher email and upload them to Unicorn",
+  "description": "Extracts the vouchers from the email and uploads them to Unicorn",
   "main": "Main.xaml",
   "dependencies": {
     "UiPath.Database.Activities": "[1.9.0]",
@@ -15,7 +15,7 @@
   "entitiesStores": [],
   "schemaVersion": "4.0",
   "studioVersion": "25.0.161.0",
-  "projectVersion": "1.0.2",
+  "projectVersion": "1.0.1",
   "runtimeOptions": {
     "autoDispose": false,
     "netFrameworkLazyLoading": false,
