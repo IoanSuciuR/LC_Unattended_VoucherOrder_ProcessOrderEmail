@@ -3,6 +3,7 @@
     <x:Property Name="in_Config" Type="InArgument(scg:Dictionary(x:String, x:Object))" />
     <x:Property Name="in_OrderID" Type="InArgument(x:String)" />
     <x:Property Name="in_OrderItems" Type="InArgument(scg:Dictionary(x:String, x:String))" />
+    <x:Property Name="in_VoucherList" Type="InArgument(scg:List(x:String))" />
   </x:Members>
   <VisualBasic.Settings>
     <x:Null />
@@ -117,7 +118,7 @@
       <AssemblyReference>System.Text.RegularExpressions</AssemblyReference>
     </sco:Collection>
   </TextExpression.ReferencesForImplementation>
-  <Sequence DisplayName="CheckDuplicate" sap:VirtualizedContainerService.HintSize="1517,1271" sap2010:WorkflowViewState.IdRef="Sequence_1">
+  <Sequence DisplayName="CheckDuplicate" sap:VirtualizedContainerService.HintSize="1264,1535" sap2010:WorkflowViewState.IdRef="Sequence_1">
     <Sequence.Variables>
       <Variable x:TypeArguments="x:String" Name="ConnectionString" />
       <Variable x:TypeArguments="x:String" Name="sql_UserID" />
@@ -130,7 +131,7 @@
         <x:Boolean x:Key="IsExpanded">True</x:Boolean>
       </scg:Dictionary>
     </sap:WorkflowViewStateService.ViewState>
-    <ui:LogMessage DisplayName="Log Message" sap:VirtualizedContainerService.HintSize="334,141" sap2010:WorkflowViewState.IdRef="LogMessage_1" Message="[&quot;Update DB with Voucher number&quot;]" />
+    <ui:LogMessage DisplayName="Log Message" sap:VirtualizedContainerService.HintSize="434,173" sap2010:WorkflowViewState.IdRef="LogMessage_1" Message="[&quot;Update DB with Voucher number&quot;]" />
     <Assign DisplayName="Get Connection String" sap:VirtualizedContainerService.HintSize="434,114" sap2010:WorkflowViewState.IdRef="Assign_1">
       <Assign.To>
         <OutArgument x:TypeArguments="x:String">[ConnectionString]</OutArgument>
@@ -139,10 +140,10 @@
         <InArgument x:TypeArguments="x:String">[in_Config("SQL_ConnectionString").ToString]</InArgument>
       </Assign.Value>
     </Assign>
-    <ui:GetRobotCredential TimeoutMS="{x:Null}" AssetName="Credentials_SQLDB_Credentials" CacheStrategy="None" DisplayName="Get Credential" sap:VirtualizedContainerService.HintSize="434,57" sap2010:WorkflowViewState.IdRef="GetRobotCredential_1" Password="[sql_Password]" Username="[sql_UserID]">
+    <ui:GetRobotCredential TimeoutMS="{x:Null}" AssetName="Credentials_SQLDB_Credentials" CacheStrategy="None" DisplayName="Get Credential" sap:VirtualizedContainerService.HintSize="434,175" sap2010:WorkflowViewState.IdRef="GetRobotCredential_1" Password="[sql_Password]" Username="[sql_UserID]">
       <sap:WorkflowViewStateService.ViewState>
         <scg:Dictionary x:TypeArguments="x:String, x:Object">
-          <x:Boolean x:Key="IsExpanded">False</x:Boolean>
+          <x:Boolean x:Key="IsExpanded">True</x:Boolean>
           <x:Boolean x:Key="IsPinned">False</x:Boolean>
         </scg:Dictionary>
       </sap:WorkflowViewStateService.ViewState>
@@ -190,6 +191,11 @@
         </ActivityAction>
       </ui:ForEach.Body>
     </ui:ForEach>
+    <ui:ExecuteQuery ContinueOnError="{x:Null}" DataTable="{x:Null}" TimeoutMS="{x:Null}" DisplayName="Add to Voucher DB" ExistingDbConnection="[DB_Conn]" sap:VirtualizedContainerService.HintSize="434,146" sap2010:WorkflowViewState.IdRef="ExecuteQuery_3" Sql="[in_Config(&quot;DBQ_BulkInsertVoucher&quot;).ToString.Replace(&quot;&lt;values&gt;&quot;,String.Join(&quot;,&quot; + Environment.NewLine,in_VoucherList.Select(function(voucher) in_Config(&quot;InsertTemplate&quot;).ToString.Replace(&quot;&lt;voucher&gt;&quot;,voucher))))]">
+      <ui:ExecuteQuery.Parameters>
+        <scg:Dictionary x:TypeArguments="x:String, Argument" />
+      </ui:ExecuteQuery.Parameters>
+    </ui:ExecuteQuery>
     <ui:DatabaseDisconnect DatabaseConnection="[DB_Conn]" DisplayName="Disconnect from Database" sap:VirtualizedContainerService.HintSize="434,48" sap2010:WorkflowViewState.IdRef="DatabaseDisconnect_1" />
   </Sequence>
 </Activity>
