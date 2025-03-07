@@ -118,7 +118,7 @@
       <AssemblyReference>System.Text.RegularExpressions</AssemblyReference>
     </sco:Collection>
   </TextExpression.ReferencesForImplementation>
-  <Sequence DisplayName="CheckDuplicate" sap:VirtualizedContainerService.HintSize="1264,1535" sap2010:WorkflowViewState.IdRef="Sequence_1">
+  <Sequence DisplayName="CheckDuplicate" sap:VirtualizedContainerService.HintSize="986,1535" sap2010:WorkflowViewState.IdRef="Sequence_1">
     <Sequence.Variables>
       <Variable x:TypeArguments="x:String" Name="ConnectionString" />
       <Variable x:TypeArguments="x:String" Name="sql_UserID" />
@@ -157,7 +157,7 @@
       </Assign.Value>
     </Assign>
     <ui:DatabaseConnect DisplayName="Connect to Database" sap:VirtualizedContainerService.HintSize="434,92" sap2010:WorkflowViewState.IdRef="DatabaseConnect_1" ProviderName="Microsoft.Data.SqlClient" ConnectionString="[ConnectionString]" DatabaseConnection="[DB_Conn]" />
-    <ui:ExecuteQuery ContinueOnError="{x:Null}" DataTable="{x:Null}" TimeoutMS="{x:Null}" DisplayName="Update Order" ExistingDbConnection="[DB_Conn]" sap:VirtualizedContainerService.HintSize="434,146" sap2010:WorkflowViewState.IdRef="ExecuteQuery_1" Sql="[in_Config(&quot;DBQ_UpdateOrder&quot;).ToString.Replace(&quot;&lt;pvStore_id&gt;&quot;,in_OrderID).Replace(&quot;&lt;orderId&gt;&quot;,in_OrderID)]">
+    <ui:ExecuteQuery ContinueOnError="{x:Null}" DataTable="{x:Null}" TimeoutMS="{x:Null}" DisplayName="Update Order" ExistingDbConnection="[DB_Conn]" sap:VirtualizedContainerService.HintSize="434,146" sap2010:WorkflowViewState.IdRef="ExecuteQuery_1" Sql="[in_Config(&quot;DBQ_UpdateOrder&quot;).ToString.Replace(&quot;&lt;orderId&gt;&quot;,in_OrderID)]">
       <ui:ExecuteQuery.Parameters>
         <scg:Dictionary x:TypeArguments="x:String, Argument" />
       </ui:ExecuteQuery.Parameters>
